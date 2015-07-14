@@ -20,9 +20,12 @@ module.exports = JavaImporter =
     classDictionary = this.getDictionary()
     className = editor.getWordUnderCursor()
     if classDictionary[className]
-      console.log 'import ' + classDictionary[className] + ';'
+      statement = 'import ' + classDictionary[className] + ';'
+      atom.clipboard.write statement
+      atom.notifications.addSuccess statement
+      atom.notifications.addSuccess 'Copied to Your Clipboard'
     else
-      console.log 'Class not found'
+      atom.notifications.addError className + ' NOT Found'
     #if scope == 'storage.type.java'
       
     #wholeText = editor.getText()

@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle java-importer'
-      'command': 'java-importer:toggle'
+      'label': 'Get import statement'
+      'command': 'java-importer:import'
     }
   ]
 'menu': [
