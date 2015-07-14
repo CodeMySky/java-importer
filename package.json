@@ -2,7 +2,7 @@
   "name": "java-importer",
   "main": "./lib/java-importer",
   "version": "0.1.0",
-  "description": "A short description of your package",
+  "description": "Helps java user to import certain class",
   "keywords": [],
   "activationCommands": {
     "atom-workspace": "java-importer:import"
