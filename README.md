@@ -1,5 +1,16 @@
 # java-importer package
 
-A short description of your package.
+## How to use:
+1. install the package
+2. select the class you want to import
+3. right click and select "Get import statement"
+4. Look at the notifications, success: paste the statement to whereever it is approperate, failed, you should import it manually.
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+## Attention:
+1. Initialization may takes a long time when the project is big, the window may freeze.
+
+## Roadmap:
+1. Solve the window freeze problem
+2. Add function: sort statements
+3. Add function: detect unused statements
+
