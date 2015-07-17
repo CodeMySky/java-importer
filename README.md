@@ -4,7 +4,8 @@
 1. install the package
 2. select the class you want to import
 3. right click and select "Get import statement"
-4. Look at the notifications, success: paste the statement to whereever it is approperate, failed, you should import it manually.
+  1. Select appropriate path when there are multiple candidates.
+4. Look at the notifications, success: paste the statement to wherever it is appropriate, failed, you should import it manually.
 
 ## Attention:
 1. Initialization may takes a long time when the project is big, the window may freeze.

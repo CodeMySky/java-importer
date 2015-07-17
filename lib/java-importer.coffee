@@ -1,6 +1,7 @@
 JavaImporterView = require './java-importer-view'
 JavaBaseClassList = require './java-base-class-list'
 {search, PathScanner, PathSearcher} = require 'scandal'
+JavaImporterView = require './java-importer-view'
 
 module.exports = JavaImporter =
   javaImporterView: null
@@ -16,8 +17,10 @@ module.exports = JavaImporter =
       this.classDictionary = state;
     else
       this.getDictionary()
-
+      
   import: ->
+    @javaImporterView = new JavaImporterView()
+    #@javaImporterView.viewForItem('HEEYYY')
     editor = atom.workspace.getActivePaneItem()
     selection = editor.getLastSelection()
     grammar = editor.getGrammar().name
@@ -26,9 +29,9 @@ module.exports = JavaImporter =
     className = editor.getWordUnderCursor()
     if classDictionary[className]
       statement = 'import ' + classDictionary[className] + ';'
-      atom.clipboard.write statement
-      atom.notifications.addSuccess statement
-      atom.notifications.addSuccess 'Copied to Your Clipboard'
+      
+      @javaImporterView.addAll(classDictionary[className])
+      @javaImporterView.show()
     else
       atom.notifications.addError 'Class: ' + className + ' is NOT Found'
   
@@ -43,7 +46,11 @@ module.exports = JavaImporter =
       className = filename.split('.')[0];
       packageName = result.matches[0].matchText.replace(/package\s+/,'').replace(';','')
       classPath = "#{packageName}.#{className}"
-      that.classDictionary[className] = classPath;
+      console.log classPath
+      if !that.classDictionary[className]
+        that.classDictionary[className] = [classPath]
+      else
+        that.classDictionary[className].push(classPath)
 
     name = "Search #{path}"
     console.time name
