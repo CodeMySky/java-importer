@@ -20,3 +20,4 @@
 2. Add extra line break when sorting statements.
 3. Add function: detect unused statements
 4. Detect libs in local environment and import automatically.
+5. Add more test cases.
