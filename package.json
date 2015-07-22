@@ -3,7 +3,7 @@
   "main": "./lib/java-importer",
   "version": "1.3.0",
   "description": "Helps java user to import certain class",
-  "keywords": [],
+  "keywords": ["java", "import"],
   "activationCommands": {
     "atom-workspace": [
       "java-importer:organize",
