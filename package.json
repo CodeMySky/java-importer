@@ -5,7 +5,8 @@
   "description": "Helps java user to import certain class",
   "keywords": [],
   "activationCommands": {
-    "atom-workspace": "java-importer:import"
+    "atom-workspace": "java-importer:import",
+    "atom-workspace": "java-importer:organize"
   },
   "repository": "https://github.com/CodeMySky/java-importer",
   "license": "MIT",

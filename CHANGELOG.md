@@ -1,3 +1,6 @@
+## 1.3.0
+* Add a new button to help organize the import statements in alphabetic order.
+
 ## 1.2.0
 * Add the ability to show a selection box when there are multiple choices.
 

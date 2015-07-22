@@ -2,6 +2,7 @@ JavaImporterView = require './java-importer-view'
 JavaBaseClassList = require './java-base-class-list'
 {search, PathScanner, PathSearcher} = require 'scandal'
 JavaImporterView = require './java-importer-view'
+{DirectorySearch} = require 'atom'
 
 module.exports = JavaImporter =
   javaImporterView: null
@@ -11,12 +12,12 @@ module.exports = JavaImporter =
   
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
-    console.log "restored"
-    console.log state
-    if state.hasOwnProperty()
-      this.classDictionary = state;
-    else
-      this.getDictionary()
+    atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
+    this.classDictionary = null
+    # if state.hasOwnProperty()
+    #   this.classDictionary = state;
+    # else
+    #   this.getDictionary()
       
   import: ->
     @javaImporterView = new JavaImporterView()
@@ -35,7 +36,7 @@ module.exports = JavaImporter =
     else
       atom.notifications.addError 'Class: ' + className + ' is NOT Found'
   
-  tranverse: (entry) ->
+  tranverse: (entry, callback) ->
     that = this
     path = entry.getRealPathSync()
     scanner = new PathScanner(path, inclusions:['*.java'])
@@ -46,18 +47,15 @@ module.exports = JavaImporter =
       className = filename.split('.')[0];
       packageName = result.matches[0].matchText.replace(/package\s+/,'').replace(';','')
       classPath = "#{packageName}.#{className}"
-      console.log classPath
       if !that.classDictionary[className]
         that.classDictionary[className] = [classPath]
       else
         that.classDictionary[className].push(classPath)
 
-    name = "Search #{path}"
-    console.time name
     search /package\s+[a-zA-Z0-9_\.]+\s*;/ig, scanner, searcher, ->
-      console.timeEnd name
+      callback()
             
-  getDictionary: ->
+  getDictionary: (callback)->
     if this.classDictionary == null
       this.classDictionary = {}
       for classPath in JavaBaseClassList
@@ -68,7 +66,22 @@ module.exports = JavaImporter =
       for directory in directories
         this.tranverse directory
     return this.classDictionary
-    
+
+  organize: ->
+    console.log("Ready to organize")
+    editor = atom.workspace.getActivePaneItem()
+    selection = editor.getLastSelection()
+    text =  selection.getText()
+    statements = text.split('\n')
+    statements.map (s) ->
+       return String.prototype.trim.apply(s)
+    statements = statements.sort()
+    finalStatement = ''
+    for statement in statements
+      finalStatement += statement + '\n'
+    atom.clipboard.write finalStatement
+    atom.notifications.addSuccess 'Organized Statements Copied to Your Clipboard'  
+
 
   deactivate: ->
     @modalPanel.destroy()

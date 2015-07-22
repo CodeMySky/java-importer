@@ -4,19 +4,9 @@
     {
       'label': 'Get import statement'
       'command': 'java-importer:import'
+    },
+    {
+      'label': 'Organize import statements'
+      'command': 'java-importer:organize'
     }
   ]
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'java-importer'
-      'submenu': [
-        {
-          'label': 'Toggle'
-          'command': 'java-importer:toggle'
-        }
-      ]
-    ]
-  }
-]
