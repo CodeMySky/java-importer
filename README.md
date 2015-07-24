@@ -16,7 +16,7 @@
 2. Only supports: JAVA 8 classes, and classes in your project.
 
 ## Roadmap:
-1. Solve the window freeze problem
+~~1. Solve the window freeze problem~~
 2. Add extra line break when sorting statements.
 3. Add function: detect unused statements
 4. Detect libs in local environment and import automatically.

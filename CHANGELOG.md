@@ -1,3 +1,10 @@
+## 1.3.2
+* Abandon using of scandal. Use native scan function and solved freeze window problem.
+* Add Notification when the scan started and the scan ended
+
+## 1.3.1
+* Add first test suite to increase stability
+
 ## 1.3.0
 * Add a new button to help organize the import statements in alphabetic order.
 

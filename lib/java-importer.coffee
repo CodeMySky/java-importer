@@ -1,6 +1,5 @@
 JavaImporterView = require './java-importer-view'
 JavaBaseClassList = require './java-base-class-list'
-{search, PathScanner, PathSearcher} = require 'scandal'
 JavaImporterView = require './java-importer-view'
 {DirectorySearch} = require 'atom'
 
@@ -9,65 +8,53 @@ module.exports = JavaImporter =
   modalPanel: null
   subscriptions: null
   classDictionary: null
+  debug: false
   
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-    this.classDictionary = {}
-    console.log "java importer activated"
-    # TODO: recover directory from state.
-    # if state.hasOwnProperty()
-    #   this.classDictionary = state;
-    # else
-    #   this.getDictionary()
+     # test
+    if state.hasOwnProperty() && !@debug
+      @classDictionary = state;
+    else 
+      @classDictionary = this.getDictionary()
       
   import: ->
     @javaImporterView = new JavaImporterView()
-    #@javaImporterView.viewForItem('HEEYYY')
     editor = atom.workspace.getActivePaneItem()
     selection = editor.getLastSelection()
-    grammar = editor.getGrammar().name
-    #scope = editor.scopeDescriptorForBufferPosition editor.getCursorBufferPosition()
-    classDictionary = this.getDictionary()
     className = editor.getWordUnderCursor()
-    if classDictionary[className]
-      statement = 'import ' + classDictionary[className] + ';'
-      
-      @javaImporterView.addAll(classDictionary[className])
+    if @classDictionary && @classDictionary[className]
+      @javaImporterView.addAll(@classDictionary[className])
       @javaImporterView.show()
     else
       atom.notifications.addError 'Class: ' + className + ' is NOT Found'
   
-  tranverse: (entry, callback) ->
+  tranverse:  ->
     that = this
-    path = entry.getRealPathSync()
-    scanner = new PathScanner(path, inclusions:['*.java'])
-    searcher = new PathSearcher()
-    
-    searcher.on 'results-found',(result)->
+    promise = atom.workspace.scan /package\s+[a-zA-Z0-9_\.]+\s*;/ig, (result) ->
       filename = result.filePath.replace(/^.*[\\\/]/, '');
       className = filename.split('.')[0];
       packageName = result.matches[0].matchText.replace(/package\s+/,'').replace(';','')
       classPath = "#{packageName}.#{className}"
-      if !that.classDictionary[className]
-        that.classDictionary[className] = [classPath]
-      else
+      if that.classDictionary[className] instanceof Array
         that.classDictionary[className].push(classPath)
-
-    search /package\s+[a-zA-Z0-9_\.]+\s*;/ig, scanner, searcher, ->
-      callback()
+      else
+        that.classDictionary[className] = [classPath]
+    promise.done ->
+      atom.notifications.addSuccess 'Project scanning finished'
             
   getDictionary: (callback)->
-    if this.classDictionary == null
-      this.classDictionary = {}
+    if @classDictionary == null || !@classDictionary.hasOwnProperty()
+      @classDictionary = {}
       for classPath in JavaBaseClassList
         lastDot = classPath.lastIndexOf('.')
         className = classPath.substring lastDot + 1
-        this.classDictionary[className] = classPath
+        @classDictionary[className] = [classPath]
       directories =  atom.project.getDirectories()
-      for directory in directories
-        this.tranverse directory
-    return this.classDictionary
+      atom.notifications.addSuccess 'Project scanning started'
+      @tranverse()
+    return @classDictionary
 
   organize: ->
     console.log("Ready to organize")
@@ -93,4 +80,4 @@ module.exports = JavaImporter =
 
   serialize: ->
     javaImporterViewState: @javaImporterView.serialize()
-    return this.classDictionary
+    return @classDictionary
