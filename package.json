@@ -7,12 +7,6 @@
     "java",
     "import"
   ],
-  "activationCommands": {
-    "atom-workspace": [
-      "java-importer:organize",
-      "java-importer:import"
-    ]
-  },
   "repository": "https://github.com/CodeMySky/java-importer",
   "license": "MIT",
   "engines": {

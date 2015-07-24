@@ -13,7 +13,9 @@ module.exports = JavaImporter =
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-    this.classDictionary = null
+    this.classDictionary = {}
+    console.log "java importer activated"
+    # TODO: recover directory from state.
     # if state.hasOwnProperty()
     #   this.classDictionary = state;
     # else
