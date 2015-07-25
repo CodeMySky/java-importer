@@ -13,7 +13,7 @@ module.exports = JavaImporter =
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-     # test
+    # test List<Atom_me> Map HashMap List<ForeignObj>
     if state.hasOwnProperty() && !@debug
       @classDictionary = state;
     else 
@@ -23,12 +23,16 @@ module.exports = JavaImporter =
     @javaImporterView = new JavaImporterView()
     editor = atom.workspace.getActivePaneItem()
     selection = editor.getLastSelection()
-    className = editor.getWordUnderCursor()
+    className = selection.getText()
+    if className.length == 0
+      selection.selectWord()
+      className = selection.getText()
+    
     if @classDictionary && @classDictionary[className]
       @javaImporterView.addAll(@classDictionary[className])
       @javaImporterView.show()
     else
-      atom.notifications.addError 'Class: ' + className + ' is NOT Found'
+      atom.notifications.addError "Class: <code>#{className}</code> is NOT Found"
   
   tranverse:  ->
     that = this

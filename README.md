@@ -1,8 +1,10 @@
 # java-importer package
+Project Page: https://atom.io/packages/java-importer
 
 ## How to use:
-1. install the package
-2. select the class you want to import
+### Import class
+1. install the package using package manager.
+2. select the class you want to import.
 3. right click and select "Get import statement"
   1. Select appropriate path when there are multiple candidates.
 4. Look at the notifications, success: paste the statement to wherever it is appropriate, failed, you should import it manually.

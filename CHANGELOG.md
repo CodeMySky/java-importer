@@ -1,3 +1,9 @@
+## 1.3.4
+* Fixed Bug https://github.com/CodeMySky/java-importer/issues/1
+
+## 1.3.3
+* Add Travis Cl Test configure
+
 ## 1.3.2
 * Abandon using of scandal. Use native scan function and solved freeze window problem.
 * Add Notification when the scan started and the scan ended

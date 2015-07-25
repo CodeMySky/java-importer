@@ -2,7 +2,7 @@
   "name": "java-importer",
   "main": "./lib/java-importer",
   "version": "1.3.4",
-  "description": "Helps java user to import certain class",
+  "description": "Helps java users to easily import and organize their import statements",
   "keywords": [
     "java",
     "import"
