@@ -36,5 +36,14 @@ class JavaImporterView extends SelectListView
     @panel.hide()
    
   cancelled: ->
-    console.log("This view was cancelled")
     @panel.hide()
+    
+  # Select right class name from text.
+  getSelection: ->
+    editor = atom.workspace.getActiveTextEditor()
+    selection = editor.getLastSelection()
+    className = selection.getText()
+    if className.length == 0
+      selection.selectWord()
+      className = selection.getText()
+    return className

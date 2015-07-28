@@ -14,19 +14,15 @@ module.exports = JavaImporter =
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
     # test List<Atom_me> Map HashMap List<ForeignObj>
-    if state.hasOwnProperty() && !@debug
-      @classDictionary = state;
-    else 
-      @classDictionary = this.getDictionary()
+    @classDictionary =
+      if state
+        @getDictionary()#atom.deserializers.deserialize(state)
+      else
+        @getDictionary()
       
   import: ->
     @javaImporterView = new JavaImporterView()
-    editor = atom.workspace.getActivePaneItem()
-    selection = editor.getLastSelection()
-    className = selection.getText()
-    if className.length == 0
-      selection.selectWord()
-      className = selection.getText()
+    className = @javaImporterView.getSelection()
     
     if @classDictionary && @classDictionary[className]
       @javaImporterView.addAll(@classDictionary[className])
@@ -80,8 +76,6 @@ module.exports = JavaImporter =
     @modalPanel.destroy()
     @subscriptions.dispose()
     @javaImporterView.destroy()
-    
 
   serialize: ->
-    javaImporterViewState: @javaImporterView.serialize()
-    return @classDictionary
+    @classDictionary.serialize()
