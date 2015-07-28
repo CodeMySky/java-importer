@@ -1,5 +1,5 @@
 # java-importer package
-Project Page: https://atom.io/packages/java-importer
+Project Page: https://atom.io/packages/java-importer [![Build Status](https://travis-ci.org/CodeMySky/java-importer.svg?branch=master)](https://travis-ci.org/CodeMySky/java-importer)
 
 ## How to use:
 ### Import class
