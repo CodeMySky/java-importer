@@ -20,7 +20,6 @@ class JavaImporterView extends SelectListView
         @itemList.push(item);
     
   show: ->
-    debugger
     if @itemList.length > 1
       @setItems(@itemList)
       @panel.show()

@@ -13,10 +13,9 @@ module.exports = JavaImporter =
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-    # test List<Atom_me> Map HashMap List<ForeignObj>
     @classDictionary =
-      if state
-        @getDictionary()#atom.deserializers.deserialize(state)
+      if state && state.created
+        state
       else
         @getDictionary()
       
@@ -46,7 +45,7 @@ module.exports = JavaImporter =
             
   getDictionary: (callback)->
     if @classDictionary == null || !@classDictionary.hasOwnProperty()
-      @classDictionary = {}
+      @classDictionary = {created: new Date()}
       for classPath in JavaBaseClassList
         lastDot = classPath.lastIndexOf('.')
         className = classPath.substring lastDot + 1
@@ -73,9 +72,13 @@ module.exports = JavaImporter =
 
 
   deactivate: ->
-    @modalPanel.destroy()
-    @subscriptions.dispose()
-    @javaImporterView.destroy()
+    if @modalPanel
+      @modalPanel.destroy()
+    if @subscriptions
+      @subscriptions.dispose()
+    if @javaImporterView
+      @javaImporterView.destroy()
 
   serialize: ->
-    @classDictionary.serialize()
+    if @classDictionary
+      @classDictionary
