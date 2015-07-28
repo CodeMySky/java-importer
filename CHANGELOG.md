@@ -1,3 +1,6 @@
+## 1.3.6
+* Fixed the deserialization and activate bug. 
+
 ## 1.3.4
 * Fixed Bug https://github.com/CodeMySky/java-importer/issues/1
 
