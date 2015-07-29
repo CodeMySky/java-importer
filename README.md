@@ -14,13 +14,14 @@ Project Page: https://atom.io/packages/java-importer
 2. Paste the sorted statements and remove the original one.
 
 ## Attention:
-1. ~~Initialization may takes a long time when the project is big, the window may freeze.~~
-2. Only supports: JAVA 8 classes, and classes in your project.
+1. Only supports: JAVA 8 classes, and classes in your project.
 
 ## Roadmap:
-1. ~~Solve the window freeze problem~~
-2. Add extra line break when sorting statements.
-3. Add function: detect unused statements
-4. Detect libs in local environment and import automatically.
-5. Add more test cases.
-6. Detect import statements you once used.
+- Detect import statements you once used.
+- Add extra line break when sorting statements.
+- Add function: detect unused statements
+- Warn if you have already imported the class.
+- Detect libs in local environment and import automatically.
+
+- ~~Solve the window freeze problem~~
+- ~~Add more test cases~~.

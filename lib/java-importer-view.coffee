@@ -46,3 +46,12 @@ class JavaImporterView extends SelectListView
       selection.selectWord()
       className = selection.getText()
     return className
+  
+  sendStatementNotFoundNotification: ->
+    
+  sendStatementFoundNotification: (className) ->
+    atom.notifications.addError "Class: <code>#{className}</code> is NOT Found"
+    
+  sendProjectScanFinishedNotification: ->
+    atom.notifications.addSuccess 'Project scanning finished'
+    
