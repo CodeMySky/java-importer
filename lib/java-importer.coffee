@@ -10,12 +10,16 @@ module.exports = JavaImporter =
     that = this
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
+    atom.commands.add 'atom-workspace', 'java-importer:update', => @update()
     @_model = new Model()
     @_view = new View()
+    @update()
+  
+  update: ->
+    that = this
     @_model.updateDictionary()
       .then ->
         that._view.sendProjectScanFinishedNotification()
-        
     # if state
     #   # Deserialize model
     # else
@@ -25,13 +29,13 @@ module.exports = JavaImporter =
     
   import: ->
     # @view = new View()
-    # className = @view.getSelection()
-    # 
-    # if @classDictionary && @_model.getStatements(className)
-    #   @view.addAll(@classDictionary[className])
-    #   @view.show()
-    # else
-    #   @view.sendStatementNotFoundNotification(className)
+    className = @_view.getSelection()
+    
+    if @_model.getStatements(className)
+      @_view.addAll(@classDictionary[className])
+      @_view.show()
+    else
+      @_view.sendStatementNotFoundNotification(className)
   
   
 
