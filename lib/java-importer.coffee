@@ -10,6 +10,7 @@ module.exports = JavaImporter =
     that = this
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
+<<<<<<< HEAD
     @_view = new View()
     
     if state && state.model
@@ -29,6 +30,36 @@ module.exports = JavaImporter =
       @_view.show()
     else
       @_view.sendStatementNotFoundNotification selectedText
+=======
+    atom.commands.add 'atom-workspace', 'java-importer:update', => @update()
+    @_model = new Model()
+    @_view = new View()
+    @update()
+  
+  update: ->
+    that = this
+    @_model.updateDictionary()
+      .then ->
+        that._view.sendProjectScanFinishedNotification()
+    # if state
+    #   # Deserialize model
+    # else
+    #   @_model = new Model()
+    #   @_model.updateDictionary().then ->
+    #     @_view.sendProjectScanFinishedNotification()
+    
+  import: ->
+    # @view = new View()
+    className = @_view.getSelection()
+    
+    if @_model.getStatements(className)
+      @_view.addAll(@classDictionary[className])
+      @_view.show()
+    else
+      @_view.sendStatementNotFoundNotification(className)
+  
+  
+>>>>>>> e1fad9f6cede2b96499819e85339f72280028813
 
   organize: ->
     console.log("Ready to organize test")

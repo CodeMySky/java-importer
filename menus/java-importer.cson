@@ -4,9 +4,5 @@
     {
       'label': 'Get import statement'
       'command': 'java-importer:import'
-    },
-    {
-      'label': 'Organize import statements'
-      'command': 'java-importer:organize'
     }
   ]

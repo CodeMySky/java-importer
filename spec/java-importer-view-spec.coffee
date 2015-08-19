@@ -12,15 +12,8 @@ describe 'Java Importer View', ->
     view = new ImporterView()
     
     waitsForPromise ->
-      atom.packages.activatePackage('java-importer')
-    
-    waitsForPromise ->
       atom.workspace.open('./test/resources/sample.txt').then ->
         editor = atom.workspace.getActiveTextEditor()
-
-  describe 'Should have all commands', ->
-    it 'Should be activated without problem', ->
-      expect(atom.packages.isPackageActive('java-importer')).toBe true
       
   describe 'Should select word properly', ->
     it 'should load test file correctly', ->

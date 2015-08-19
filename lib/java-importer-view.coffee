@@ -15,6 +15,7 @@ class JavaImporterView extends SelectListView
     "<li>#{item}</li>"
     
   addAll: (itemList) ->
+    @itemList = []
     if itemList && itemList.length
       for item in itemList
         @itemList.push(item);
@@ -30,8 +31,8 @@ class JavaImporterView extends SelectListView
   confirmed: (item) ->
     statement = 'import ' + item + ';'
     atom.clipboard.write statement
-    atom.notifications.addSuccess statement
-    atom.notifications.addSuccess 'Copied to Your Clipboard'
+    @sendStatementFoundNotification statement
+    
     @panel.hide()
    
   cancelled: ->
@@ -47,9 +48,11 @@ class JavaImporterView extends SelectListView
       className = selection.getText()
     return className
   
-  sendStatementNotFoundNotification: ->
+  sendStatementFoundNotification: (statement)->
+    atom.notifications.addSuccess statement
+    atom.notifications.addSuccess 'Copied to Your Clipboard'
     
-  sendStatementFoundNotification: (className) ->
+  sendStatementNotFoundNotification: (className) ->
     atom.notifications.addError "Class: <code>#{className}</code> is NOT Found"
     
   sendProjectScanFinishedNotification: ->
