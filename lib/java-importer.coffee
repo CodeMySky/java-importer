@@ -1,42 +1,37 @@
 View = require './java-importer-view'
 Model = require './java-importer-model'
-{DirectorySearch} = require 'atom'
 
 module.exports = JavaImporter =
   _view: null
-  debug: false
+  _model: null
   
+  # Recover from suspension.
   activate: (state) ->
     that = this
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-    @_model = new Model()
     @_view = new View()
-    @_model.updateDictionary()
-      .then ->
-        that._view.sendProjectScanFinishedNotification()
-        
-    # if state
-    #   # Deserialize model
-    # else
-    #   @_model = new Model()
-    #   @_model.updateDictionary().then ->
-    #     @_view.sendProjectScanFinishedNotification()
+    
+    if state && state.model
+      @_model = atom.deserializers.deserialize(state.model)
+    else
+      @_model = new Model()
+      @_model.updateDictionary()
+        .then ->
+          that._view.sendProjectScanFinishedNotification()
     
   import: ->
-    # @view = new View()
-    # className = @view.getSelection()
-    # 
-    # if @classDictionary && @_model.getStatements(className)
-    #   @view.addAll(@classDictionary[className])
-    #   @view.show()
-    # else
-    #   @view.sendStatementNotFoundNotification(className)
-  
-  
+    selectedText = @_view.getSelection()
+    matchedPaths = @_model.getPaths selectedText
+    console.log matchedPaths
+    if matchedPaths
+      @_view.addAll matchedPaths
+      @_view.show()
+    else
+      @_view.sendStatementNotFoundNotification selectedText
 
   organize: ->
-    console.log("Ready to organize")
+    console.log("Ready to organize test")
     editor = atom.workspace.getActivePaneItem()
     selection = editor.getLastSelection()
     text =  selection.getText()
@@ -60,5 +55,4 @@ module.exports = JavaImporter =
       @view.destroy()
 
   serialize: ->
-    if @classDictionary
-      @classDictionary
+    model: @_model.serialize()
