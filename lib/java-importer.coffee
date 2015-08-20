@@ -13,6 +13,7 @@ module.exports = JavaImporter =
   ##  Serialization and Deserialization
   #######################################
   activate: (state) ->
+    that = this
     # Add commands to command dropdown
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
@@ -27,12 +28,16 @@ module.exports = JavaImporter =
     
     # Create new view
     @m_view = new View()
+    
+    # Update Dictionary on path change
+    atom.project.onDidChangePaths (paths) ->
+      that.update()
   
   deactivate: ->
-      
+    @cancelScan()
+    
   serialize: ->
-    if (@m_scanPromise)
-      @m_scanPromise.cancel()
+    @cancelScan()
     model: @m_model.serialize()
   
   #######################################
@@ -40,9 +45,15 @@ module.exports = JavaImporter =
   #######################################
   update: ->
     that = this
-    @scanPromise = @m_model.updateDictionary()
-    @scanPromise.then ->
+    @cancelScan()
+    @m_scanPromise = @m_model.updateDictionary()
+    @m_scanPromise.then ->
         that.m_view.sendProjectScanFinishedNotification()
+  
+  cancelScan: -> 
+    if @m_scanPromise && @m_scanPromise.cancel
+      @m_scanPromise.cancel()
+    return null
         
   #######################################
   ##  Function: Import

@@ -6,3 +6,12 @@
       'command': 'java-importer:import'
     }
   ]
+'menu': [
+  {
+    'label': 'Edit'
+    'submenu': [
+      'label': 'Organize Imports'
+      'command': 'java-importer:organize'
+    ]
+  }
+]

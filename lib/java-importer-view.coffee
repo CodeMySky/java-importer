@@ -26,9 +26,9 @@ class JavaImporterView extends SelectListView
       @panel.show()
       @focusFilterEditor()
     else if @itemList.length == 1
-      @_confirmImport(@itemList[0])
+      @confirmed(@itemList[0])
   
-  _confirmImport: (item) ->
+  confirmed: (item) ->
     statement = 'import ' + item + ';'
     atom.clipboard.write statement
     @sendStatementFoundNotification statement

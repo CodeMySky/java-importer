@@ -10,18 +10,23 @@ Project Page: https://atom.io/packages/java-importer
 4. Look at the notifications, success: paste the statement to wherever it is appropriate, failed, you should import it manually.
 
 ### Organize import statements
-1. Select all import statements, right click and select "Organize import statements" in context menu.
+1. Select all import statements, select "Organize imports" in Edit menu.
 2. Paste the sorted statements and remove the original one.
 
+## Update dictionary manually
+1. Press Cmd+Shift+P to open command panel.
+2. Type java-importer:update to trigger manual update.
+
 ## Attention:
-1. Only supports: JAVA 8 classes, and classes in your project.
+1. Only supports: JAVA 8 classes, and classes in your project, and classes to have used in your project.
 
 ## Roadmap:
-- Detect import statements you once used.
+- Run scan function every hour to catch the latest changes.
 - Add extra line break when sorting statements.
 - Add function: detect unused statements
 - Warn if you have already imported the class.
 - Detect libs in local environment and import automatically.
 
-- ~~Solve the window freeze problem~~
-- ~~Add more test cases~~.
+- ~~Detect import statements you once used.~~
+- ~~Solve the window freeze problem.~~
+- ~~Add more test cases.~~

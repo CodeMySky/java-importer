@@ -42,12 +42,24 @@ module.exports = class JavaImporterModel
     if atom.project.getDirectories().length == 0
       return new Promise ->
       
-    scanPromise = atom.workspace.scan /package\s+[a-zA-Z0-9_\.]+\s*;/ig, (result) ->  
+    scanPromise = atom.workspace.scan /package\s+[a-zA-Z0-9_\.]+\s*;|import\s+[a-zA-Z0-9_\.]+\s*;/ig, (result) ->  
+      # Extract class name
       filename = result.filePath.replace(/^.*[\\\/]/, '');
       name = filename.split('.')[0];
-      packageName = result.matches[0].matchText.replace(/package\s+/,'').replace(';','')
-      path = "#{packageName}.#{name}"
-      that._updateDictionaryEntry name, path
+      
+      for match in result.matches
+        matchText = match.matchText;
+        # Deal with package
+        if matchText.indexOf('package') > -1
+          packageName = matchText.replace(/package\s+/,'').replace(';','')
+          path = "#{packageName}.#{name}"
+          that._updateDictionaryEntry name, path
+        else if matchText.indexOf('import') > -1
+          path = matchText.replace(/import\s+/, '').replace(';','').trim()
+          layers = path.split('.')
+          lastIndex = layers.length - 1;
+          name = layers[lastIndex]
+          that._updateDictionaryEntry name, path
     
     return scanPromise
     

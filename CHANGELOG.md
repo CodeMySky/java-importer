@@ -1,3 +1,11 @@
+## 1.4.0
+* Refactor the project to use MVC model.
+* Add more test cases.
+* Update dictionary on "Add Project Folder"
+* Detect import statement in project file.
+* Add update command, can manually update directory.
+* Remove organize from context menu, move it to Edit menu
+
 ## 1.3.6
 * Fixed the deserialization and activate bug. 
 

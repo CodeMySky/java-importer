@@ -68,6 +68,14 @@ describe 'Java Importer View', ->
       editor.setCursorBufferPosition([2,4])
       expect(view.getSelection()).toBe 'ArrayList'
   
+  describe 'Function: Update', ->
+    it 'should have a confirmed method', ->
+      expect(view.confirmed).toBeDefined()
+    
+    it 'should write to clipboard', ->
+      view.confirmed('test')
+      expect(atom.clipboard.read()).toBe 'import test;'
+  
   describe 'Function: Organize', ->
     it 'should write to clipboard properly', ->
       view.copyOrganizedStatementString('test')
