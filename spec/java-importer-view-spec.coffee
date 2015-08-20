@@ -67,3 +67,8 @@ describe 'Java Importer View', ->
     it 'should extract right selection with square brackets', ->
       editor.setCursorBufferPosition([2,4])
       expect(view.getSelection()).toBe 'ArrayList'
+  
+  describe 'Function: Organize', ->
+    it 'should write to clipboard properly', ->
+      view.copyOrganizedStatementString('test')
+      expect(atom.clipboard.read()).toBe 'test'

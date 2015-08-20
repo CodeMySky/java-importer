@@ -2,88 +2,69 @@ View = require './java-importer-view'
 Model = require './java-importer-model'
 
 module.exports = JavaImporter =
-  _view: null
-  _model: null
+  #######################################
+  ##  Properties
+  #######################################
+  m_view: null
+  m_model: null
+  m_scanPromise: null
   
-  # Recover from suspension.
+  #######################################
+  ##  Serialization and Deserialization
+  #######################################
   activate: (state) ->
-    that = this
+    # Add commands to command dropdown
     atom.commands.add 'atom-workspace', 'java-importer:import', => @import()
     atom.commands.add 'atom-workspace', 'java-importer:organize', => @organize()
-<<<<<<< HEAD
-    @_view = new View()
-    
-    if state && state.model
-      @_model = atom.deserializers.deserialize(state.model)
-    else
-      @_model = new Model()
-      @_model.updateDictionary()
-        .then ->
-          that._view.sendProjectScanFinishedNotification()
-    
-  import: ->
-    selectedText = @_view.getSelection()
-    matchedPaths = @_model.getPaths selectedText
-    console.log matchedPaths
-    if matchedPaths
-      @_view.addAll matchedPaths
-      @_view.show()
-    else
-      @_view.sendStatementNotFoundNotification selectedText
-=======
     atom.commands.add 'atom-workspace', 'java-importer:update', => @update()
-    @_model = new Model()
-    @_view = new View()
+    
+    # Recover from serialized state if possible
+    if state && state.model
+      @m_model = atom.deserializers.deserialize(state.model)
+    else
+      @m_model = new Model()
     @update()
+    
+    # Create new view
+    @m_view = new View()
   
+  deactivate: ->
+      
+  serialize: ->
+    if (@m_scanPromise)
+      @m_scanPromise.cancel()
+    model: @m_model.serialize()
+  
+  #######################################
+  ##  Function: Update
+  #######################################
   update: ->
     that = this
-    @_model.updateDictionary()
-      .then ->
-        that._view.sendProjectScanFinishedNotification()
-    # if state
-    #   # Deserialize model
-    # else
-    #   @_model = new Model()
-    #   @_model.updateDictionary().then ->
-    #     @_view.sendProjectScanFinishedNotification()
-    
+    @scanPromise = @m_model.updateDictionary()
+    @scanPromise.then ->
+        that.m_view.sendProjectScanFinishedNotification()
+        
+  #######################################
+  ##  Function: Import
+  #######################################    
   import: ->
-    # @view = new View()
-    className = @_view.getSelection()
-    
-    if @_model.getStatements(className)
-      @_view.addAll(@classDictionary[className])
-      @_view.show()
+    selectedText = @m_view.getSelection()
+    matchedPaths = @m_model.getPaths selectedText
+    if matchedPaths
+      @m_view.addAll matchedPaths
+      @m_view.show()
     else
-      @_view.sendStatementNotFoundNotification(className)
-  
-  
->>>>>>> e1fad9f6cede2b96499819e85339f72280028813
-
+      @m_view.sendStatementNotFoundNotification selectedText
+    
+  #######################################
+  ##  Function: Organize Statements
+  #######################################
   organize: ->
-    console.log("Ready to organize test")
-    editor = atom.workspace.getActivePaneItem()
-    selection = editor.getLastSelection()
-    text =  selection.getText()
-    statements = text.split('\n')
-    statements.map (s) ->
-       return String.prototype.trim.apply(s)
-    statements = statements.sort()
-    finalStatement = ''
-    for statement in statements
-      finalStatement += statement + '\n'
-    atom.clipboard.write finalStatement
-    atom.notifications.addSuccess 'Organized Statements Copied to Your Clipboard'  
-
-
-  deactivate: ->
-    if @modalPanel
-      @modalPanel.destroy()
-    if @subscriptions
-      @subscriptions.dispose()
-    if @view
-      @view.destroy()
-
-  serialize: ->
-    model: @_model.serialize()
+    selectedText = @m_view.getSelection()
+    statements = selectedText.split('\n')
+    
+    # Avoid single line and empty statement
+    if (statements.length > 1)
+      organizedStatementString = 
+        @m_model.organizeStatements(statements)
+      @m_view.copyOrganizedStatementString(organizedStatementString)

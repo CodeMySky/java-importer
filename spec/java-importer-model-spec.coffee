@@ -24,3 +24,19 @@ describe 'Java Importer Model', ->
     it 'should correctly scan project classes', ->
       expect(model.getPaths('Test')).toEqual ['com.example.testcase1.Test']
     
+  describe 'Function: Organize', ->
+    it 'should sort statements properly', ->
+      unorderedStatements = ['c','a','b'];
+      organizedStatementString = model.organizeStatements(unorderedStatements);
+      expect(organizedStatementString).toBe 'a\nb\nc\n'
+    
+    # It is not supported yet
+    xit 'should remove empty string', ->
+      unorderedStatements = ['a','\n','\n','b'];
+      organizedStatementString = model.organizeStatements(unorderedStatements);
+      expect(organizedStatementString).toBe 'a\nb\n'
+      
+    it 'should remove trailing space', ->
+      unorderedStatements = ['a  ','b   '];
+      organizedStatementString = model.organizeStatements(unorderedStatements);
+      expect(organizedStatementString).toBe 'a\nb\n'

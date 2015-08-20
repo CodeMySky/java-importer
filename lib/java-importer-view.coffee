@@ -26,13 +26,12 @@ class JavaImporterView extends SelectListView
       @panel.show()
       @focusFilterEditor()
     else if @itemList.length == 1
-      @confirmed(@itemList[0])
+      @_confirmImport(@itemList[0])
   
-  confirmed: (item) ->
+  _confirmImport: (item) ->
     statement = 'import ' + item + ';'
     atom.clipboard.write statement
     @sendStatementFoundNotification statement
-    
     @panel.hide()
    
   cancelled: ->
@@ -42,11 +41,22 @@ class JavaImporterView extends SelectListView
   getSelection: ->
     editor = atom.workspace.getActiveTextEditor()
     selection = editor.getLastSelection()
-    className = selection.getText()
-    if className.length == 0
+    selectedText = selection.getText()
+    if selectedText.length == 0
       selection.selectWord()
-      className = selection.getText()
-    return className
+      selectedText = selection.getText()
+    return selectedText
+  
+  #############################################
+  ## Function: Organize Statements
+  #############################################
+  
+  copyOrganizedStatementString: (organizedStatementString) ->
+    atom.clipboard.write organizedStatementString
+  
+  #############################################
+  ##  Function: Send Notifications
+  #############################################
   
   sendStatementFoundNotification: (statement)->
     atom.notifications.addSuccess statement
@@ -58,3 +68,6 @@ class JavaImporterView extends SelectListView
   sendProjectScanFinishedNotification: ->
     atom.notifications.addSuccess 'Project scanning finished'
     
+  sendOrganizeFinishedNotification: ->
+    atom.notifications.addSuccess 'Organized Statements Copied to Your Clipboard'
+  

@@ -3,30 +3,44 @@ fs = require 'fs'
 module.exports = class JavaImporterModel
   atom.deserializers.add(this)
   
-  @deserialize: (data) ->
-    model = new JavaImporterModel(data.dictionary)
+  #######################################
+  ##  Properties
+  #######################################
+  m_dictionary: null
   
-  _dictionary: null
-  
-  constructor: (@_dictionary) ->
+  #######################################
+  ##  Constructor
+  #######################################
+  constructor: (@m_dictionary) ->
     @updateDictionary()
-        
+  
+  #######################################
+  ##  Serialization and Deserialization
+  #######################################
   serialize: ->
     deserializer: 'JavaImporterModel'
-    dictionary : @_dictionary
-            
+    dictionary : @m_dictionary
+    
+  @deserialize: (data) ->
+    model = new JavaImporterModel(data.dictionary)
+        
+  #######################################
+  ##  Function: Update
+  #######################################
   updateDictionary: ->
     that = this
-    # Recreate _dictionary
-    @_dictionary = 
+    # Recreate m_dictionary
+    @m_dictionary = 
       created: new Date()
     data = require("./data/java8.json")
     
     for path in data.nameList
         name = path.substring path.lastIndexOf('.') + 1
         @_updateDictionaryEntry name, path
-    # if atom.project.getDirectories().length == 0
-    #   return new Promise()
+    
+    # Stop local scan if there is no directory present
+    if atom.project.getDirectories().length == 0
+      return new Promise ->
       
     scanPromise = atom.workspace.scan /package\s+[a-zA-Z0-9_\.]+\s*;/ig, (result) ->  
       filename = result.filePath.replace(/^.*[\\\/]/, '');
@@ -34,17 +48,28 @@ module.exports = class JavaImporterModel
       packageName = result.matches[0].matchText.replace(/package\s+/,'').replace(';','')
       path = "#{packageName}.#{name}"
       that._updateDictionaryEntry name, path
-
     
     return scanPromise
     
   getPaths: (name) ->
-    return @_dictionary[name]
+    return @m_dictionary[name]
 
   _updateDictionaryEntry: (name, path) ->
-    pathList = @_dictionary[name]
+    pathList = @m_dictionary[name]
     if pathList instanceof Array
       if pathList.indexOf(path) == -1
         pathList.push path
     else
-      @_dictionary[name] = [path]
+      @m_dictionary[name] = [path]
+      
+  ########################################
+  ##  Start Organize Function
+  ########################################
+  organizeStatements: (statements) ->
+    statements = statements.map (s) ->
+      return String.prototype.trim.apply(s)
+    statements = statements.sort()
+    finalStatement = ''
+    for statement in statements
+      finalStatement += statement + '\n'
+    return finalStatement
