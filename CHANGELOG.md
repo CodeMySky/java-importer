@@ -1,3 +1,6 @@
+## 1.4.1
+* Use exact version of atom-space-pen-views to avoid compatibility problem.
+
 ## 1.4.0
 * Refactor the project to use MVC model.
 * Add more test cases.
