@@ -1,7 +1,7 @@
 {
   "name": "java-importer",
   "main": "./lib/java-importer",
-  "version": "1.4.1",
+  "version": "1.4.0",
   "description": "Helps java users to easily import and organize their import statements",
   "keywords": [
     "java",
@@ -11,5 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "atom-space-pen-views": "^2.1.0"
+  },
+  "devDependencies": {
+    "temp": "~0.8.1"
   }
 }
