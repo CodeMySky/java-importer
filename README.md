@@ -1,4 +1,4 @@
-# java-importer package [![Build Status](https://travis-ci.org/CodeMySky/java-importer.svg?branch=master)](https://travis-ci.org/CodeMySky/java-importer)
+# java-importer package [![Build Status](https://travis-ci.org/CodeMySky/java-importer.svg?branch=master)](https://travis-ci.org/CodeMySky/java-importer) ![Number of downloads](https://img.shields.io/apm/dm/java-importer.svg?style=flat-square)
 Project Page: https://atom.io/packages/java-importer 
 
 ## How to use:
