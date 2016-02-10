@@ -10,6 +10,17 @@ module.exports = JavaImporter =
   m_scanPromise: null
   
   #######################################
+  ##  Configuration
+  #######################################
+  config:
+    hideScanNotification:
+      title: 'Hide scan notification'
+      description: 'Disable notification when project scanning is complete.'
+      type: 'boolean'
+      default: false
+      order: 1
+
+  #######################################
   ##  Serialization and Deserialization
   #######################################
   activate: (state) ->
@@ -48,7 +59,7 @@ module.exports = JavaImporter =
     @cancelScan()
     @m_scanPromise = @m_model.updateDictionary()
     @m_scanPromise.then ->
-        that.m_view.sendProjectScanFinishedNotification()
+        that.m_view.sendProjectScanFinishedNotification() if !atom.config.get('java-importer.hideScanNotification')
   
   cancelScan: -> 
     if @m_scanPromise && @m_scanPromise.cancel
